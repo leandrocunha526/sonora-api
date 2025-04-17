@@ -20,9 +20,8 @@ public class ProductService {
     private final CityRepository cityRepository;
 
     public List<ProductDTO> findAll(String name) {
-        List<Product> products = name == null ?
-                productRepository.findAll() :
-                productRepository.findByNameContainingIgnoreCase(name);
+        List<Product> products = name == null ? productRepository.findAll()
+                : productRepository.findByNameContainingIgnoreCase(name);
 
         return products.stream().map(this::toDTO).collect(Collectors.toList());
     }

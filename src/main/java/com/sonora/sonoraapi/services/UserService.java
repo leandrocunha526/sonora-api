@@ -19,7 +19,8 @@ public class UserService {
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole().name()))
+                .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
+                        user.getRole().name()))
                 .collect(Collectors.toList());
     }
 

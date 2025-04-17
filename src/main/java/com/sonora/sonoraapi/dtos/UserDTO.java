@@ -26,6 +26,6 @@ public class UserDTO {
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter exatamente 11 dígitos numéricos")
     private String cpf;
 
-    @NotBlank(message = "O papel (role) do usuário é obrigatório")
+    @NotBlank(message = "O papel do usuário (role) é obrigatório")
     private String role;
 }

@@ -25,7 +25,8 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers().stream()
-                .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole()))
+                .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
+                        user.getRole()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(users);
     }
@@ -42,7 +43,8 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole().name());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
+                user.getRole().name());
         return ResponseEntity.ok(userDTO);
     }
 
@@ -74,14 +76,17 @@ public class UserController {
         User createdUser = userService.createUser(user);
 
         // Retorna o DTO com os dados do usuário criado
-        return ResponseEntity.status(201).body(new UserDTO(createdUser.getId(), createdUser.getName(), createdUser.getUsername(), createdUser.getCpf(), createdUser.getRole().name()));
+        return ResponseEntity.status(201).body(new UserDTO(createdUser.getId(), createdUser.getName(),
+                createdUser.getUsername(), createdUser.getCpf(), createdUser.getRole().name()));
     }
 
     // Edita um usuário (somente o próprio usuário ou ADMIN)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userController.isUserOwnData(authentication, #id)")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updatedUserDTO, Authentication authentication) {
-        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na URL
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updatedUserDTO,
+            Authentication authentication) {
+        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na
+        // URL
         if (!isUserOwnData(authentication, updatedUserDTO.getName())) {
             throw new RuntimeException("Acesso não autorizado");
         }
@@ -97,14 +102,16 @@ public class UserController {
         User user = userService.updateUser(id, updatedUser);
 
         // Retorna o DTO com os dados do usuário atualizado
-        return ResponseEntity.ok(new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole().name()));
+        return ResponseEntity.ok(
+                new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole().name()));
     }
 
     // Deleta um usuário (somente o próprio usuário ou ADMIN)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userController.isUserOwnData(authentication, #id)")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id, Authentication authentication) {
-        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na URL
+        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na
+        // URL
         if (!isUserOwnData(authentication, id.toString())) {
             throw new RuntimeException("Acesso não autorizado");
         }

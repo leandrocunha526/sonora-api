@@ -52,8 +52,7 @@ public class AuthService {
     // Login
     public AuthResponseDTO authenticate(AuthRequestDTO dto) {
         User user = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos"));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuário ou senha inválidos");

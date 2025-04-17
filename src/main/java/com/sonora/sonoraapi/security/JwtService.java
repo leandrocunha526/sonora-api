@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class JwtService {
@@ -24,16 +23,10 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    private Map<String, Object> generateExtraClaims(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole().name());
-        return claims;
-    }
     public String generateToken(User user) {
-        Map<String, Object> extraClaims = generateExtraClaims(user);
         return Jwts.builder()
-                .setSubject(user.getCpf())
-                .claim("role", user.getRole().name())
+                .setSubject(user.getUsername()) // **IMPORTANTE: isso vai virar o "sub" do JWT**
+                .claim("authorities", List.of("ROLE_" + user.getRole().name()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
