@@ -1,5 +1,8 @@
 package com.sonora.sonoraapi.entities;
 
+import lombok.Getter;
+
+@Getter
 public enum State {
     AC("Acre"),
     AL("Alagoas"),
@@ -29,13 +32,10 @@ public enum State {
     SE("Sergipe"),
     TO("Tocantins");
 
-    private String fullName;
+    private final String fullName;
 
     State(String fullName) {
         this.fullName = fullName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
 }

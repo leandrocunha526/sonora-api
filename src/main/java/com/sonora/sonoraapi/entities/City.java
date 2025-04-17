@@ -15,7 +15,7 @@ public class City {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private String state;
+    private State state;
 
     @Column(length = 100, nullable = false)
     private String name;

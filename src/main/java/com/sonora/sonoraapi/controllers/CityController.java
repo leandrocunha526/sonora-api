@@ -2,13 +2,16 @@ package com.sonora.sonoraapi.controllers;
 
 import com.sonora.sonoraapi.dtos.CityDTO;
 import com.sonora.sonoraapi.services.CityService;
+import com.sonora.sonoraapi.entities.State;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cities")
@@ -16,6 +19,18 @@ import java.util.List;
 public class CityController {
 
     private final CityService cityService;
+
+    // Endpoint para exibir todos os estados (somente para ADMIN e CLIENT)
+    @GetMapping("/states")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    public ResponseEntity<List<CityDTO>> getStates() {
+        // Convertendo os valores de State para a classe StateDTO
+        List<CityDTO> cities = Arrays.stream(State.values())
+                .map(city -> new CityDTO(null, city.name(), city.getFullName()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(cities);
+    }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -29,10 +44,18 @@ public class CityController {
         return ResponseEntity.ok(cityService.findAll());
     }
 
+    // Busca de cidades por nome
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
     public ResponseEntity<List<CityDTO>> search(@RequestParam String name) {
         return ResponseEntity.ok(cityService.searchByName(name));
+    }
+
+    // Busca de cidades por estado
+    @GetMapping("/search/state")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    public ResponseEntity<List<CityDTO>> searchByState(@RequestParam String state) {
+        return ResponseEntity.ok(cityService.searchByState(state));
     }
 
     @GetMapping("/{id}")

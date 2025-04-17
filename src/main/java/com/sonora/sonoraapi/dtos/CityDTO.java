@@ -6,7 +6,6 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class CityDTO {
     private Integer id;

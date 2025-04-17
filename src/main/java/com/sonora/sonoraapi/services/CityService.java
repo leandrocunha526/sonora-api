@@ -2,6 +2,7 @@ package com.sonora.sonoraapi.services;
 
 import com.sonora.sonoraapi.dtos.CityDTO;
 import com.sonora.sonoraapi.entities.City;
+import com.sonora.sonoraapi.entities.State;
 import com.sonora.sonoraapi.repositories.CityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class CityService {
     public CityDTO create(CityDTO dto) {
         City city = new City();
         city.setName(dto.getName());
-        city.setState(dto.getState());
+        city.setState(State.valueOf(dto.getState()));
         City saved = cityRepository.save(city);
         return toDTO(saved);
     }
@@ -30,6 +31,11 @@ public class CityService {
 
     public List<CityDTO> searchByName(String name) {
         return cityRepository.findByNameContainingIgnoreCase(name)
+                .stream().map(this::toDTO).toList();
+    }
+
+    public List<CityDTO> searchByState(String state) {
+        return cityRepository.findByState(state)
                 .stream().map(this::toDTO).toList();
     }
 
@@ -44,7 +50,7 @@ public class CityService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cidade não encontrada"));
 
         city.setName(dto.getName());
-        city.setState(dto.getState());
+        city.setState(State.valueOf(dto.getState()));
 
         return toDTO(cityRepository.save(city));
     }
@@ -60,7 +66,7 @@ public class CityService {
         return CityDTO.builder()
                 .id(city.getId())
                 .name(city.getName())
-                .state(city.getState())
+                .state(String.valueOf(city.getState()))
                 .build();
     }
 }
