@@ -34,7 +34,7 @@ public class CityService {
                 .stream().map(this::toDTO).toList();
     }
 
-    public List<CityDTO> searchByState(String state) {
+    public List<CityDTO> searchByState(State state) {
         return cityRepository.findByState(state)
                 .stream().map(this::toDTO).toList();
     }

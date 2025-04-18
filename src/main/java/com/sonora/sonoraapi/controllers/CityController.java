@@ -22,7 +22,7 @@ public class CityController {
 
     // Endpoint para exibir todos os estados (somente para ADMIN e CLIENT)
     @GetMapping("/states")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CityDTO>> getStates() {
         // Convertendo os valores de State para a classe StateDTO
         List<CityDTO> cities = Arrays.stream(State.values())
@@ -39,27 +39,27 @@ public class CityController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CityDTO>> getAll() {
         return ResponseEntity.ok(cityService.findAll());
     }
 
     // Busca de cidades por nome
     @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CityDTO>> search(@RequestParam String name) {
         return ResponseEntity.ok(cityService.searchByName(name));
     }
 
     // Busca de cidades por estado
     @GetMapping("/search/state")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
-    public ResponseEntity<List<CityDTO>> searchByState(@RequestParam String state) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<List<CityDTO>> searchByState(@RequestParam State state) {
         return ResponseEntity.ok(cityService.searchByState(state));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<CityDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(cityService.findById(id));
     }
