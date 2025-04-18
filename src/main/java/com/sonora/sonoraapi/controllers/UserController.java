@@ -5,9 +5,11 @@ import com.sonora.sonoraapi.entities.Role;
 import com.sonora.sonoraapi.entities.User;
 import com.sonora.sonoraapi.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class UserController {
 
     // Lista todos os usuários (somente para ADMIN)
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers().stream()
                 .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
@@ -31,27 +33,23 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    // Visualiza o perfil do usuário autenticado
     @GetMapping("/profile")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserDTO> getProfile(Authentication authentication) {
-        String username = authentication.getName();
+    public ResponseEntity<User> getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user = userService.getUserByUsername(username);
-
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
-                user.getRole().name());
-        return ResponseEntity.ok(userDTO);
+        User user = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(user);
     }
 
     // Busca um usuário pelo ID (permitido para o dono ou ADMIN)
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userController.isUserOwnData(authentication, #id)")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id, Authentication authentication) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer id) {
         // Verifica se o usuário existe no banco de dados
         UserDTO userDTO = userService.getUserById(id);
 
@@ -65,7 +63,7 @@ public class UserController {
 
     // Cria um novo usuário (somente para ADMIN)
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         User user = new User();
         user.setName(userDTO.getName());
@@ -82,14 +80,8 @@ public class UserController {
 
     // Edita um usuário (somente o próprio usuário ou ADMIN)
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userController.isUserOwnData(authentication, #id)")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updatedUserDTO,
-            Authentication authentication) {
-        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na
-        // URL
-        if (!isUserOwnData(authentication, updatedUserDTO.getName())) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updatedUserDTO) {
 
         // Atualiza o usuário no banco de dados
         User updatedUser = new User();
@@ -108,22 +100,10 @@ public class UserController {
 
     // Deleta um usuário (somente o próprio usuário ou ADMIN)
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userController.isUserOwnData(authentication, #id)")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id, Authentication authentication) {
-        // Verifica se o nome do usuário autenticado corresponde ao nome do usuário na
-        // URL
-        if (!isUserOwnData(authentication, id.toString())) {
-            throw new RuntimeException("Acesso não autorizado");
-        }
-
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         // Deleta o usuário do banco de dados
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Método auxiliar para verificar se o usuário é o dono dos dados
-    public boolean isUserOwnData(Authentication authentication, String username) {
-        String usernameAuthenticated = authentication.getName();
-        return usernameAuthenticated.equals(username);
     }
 }

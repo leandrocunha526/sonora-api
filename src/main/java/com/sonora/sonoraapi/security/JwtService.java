@@ -41,7 +41,7 @@ public class JwtService {
 
     // Validação do token
     public boolean isTokenValid(String token, User user) {
-        return extractUsername(token).equals(user.getCpf()) && !isTokenExpired(token);
+        return extractUsername(token).equals(user.getUsername()) && !isTokenExpired(token);
     }
 
     // Verifica se o token está expirado

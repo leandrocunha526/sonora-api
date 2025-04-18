@@ -1,10 +1,5 @@
 package com.sonora.sonoraapi.entities;
 
-import java.util.*;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,9 +31,5 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     @Column(nullable = false, length = 20)
-    private Role role = Role.CLIENT;
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    }
+    private Role role = Role.USER;
 }
