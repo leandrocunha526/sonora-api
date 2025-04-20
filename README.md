@@ -14,3 +14,13 @@ Aplicando-se SOLID:
 - LSP: Garanta que subclasses e implementações possam ser trocadas sem impactar o sistema.
 - ISP: Divida interfaces grandes em interfaces menores e mais específicas.
 - DIP: Use injeção de dependência para garantir que os componentes não dependam diretamente de implementações específicas, facilitando a troca e o teste de dependências.
+
+## Execução
+
+Você pode executar diretamente com Maven (usando CLI) ou usar IDEs como Intellij Community ou Ultimate (no qual o projeto foi gerado e desenvolvido).
+
+```bash
+mvn spring-boot:run
+```
+
+Este comando irá obter as depedências do projeto, irá compilar e executar.
