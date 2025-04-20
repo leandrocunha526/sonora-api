@@ -14,5 +14,6 @@ public class AuthRequestDTO {
     private String username;
 
     @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 6, max = 60, message = "O nome de usuário deve ter entre 3 e 60 caracteres")
     private String password;
 }
