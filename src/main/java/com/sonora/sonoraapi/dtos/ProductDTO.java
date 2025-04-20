@@ -2,6 +2,7 @@ package com.sonora.sonoraapi.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import com.sonora.sonoraapi.entities.Product;
 
 @Data
 @NoArgsConstructor
@@ -27,4 +28,13 @@ public class ProductDTO {
     private Integer cityId;
 
     private String cityName;
+    
+    public ProductDTO(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.stock = product.getStock();
+        this.cityId = product.getCity().getId();
+        this.cityName = product.getCity().getName();
+    }
 }

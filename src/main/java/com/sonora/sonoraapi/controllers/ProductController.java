@@ -49,4 +49,10 @@ public class ProductController {
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/search")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	public ResponseEntity<List<ProductDTO>> search(@RequestParam String name) {
+		return ResponseEntity.ok(productService.findAll(name));
+	}
 }
