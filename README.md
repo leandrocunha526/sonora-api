@@ -24,3 +24,8 @@ mvn spring-boot:run
 ```
 
 Este comando irá obter as depedências do projeto, irá compilar e executar.
+
+## Permissões
+
+ADMIN: Todas as permissões
+USER: Registros de produtos, cidades, perfil e cadastro do próprio usuário.
