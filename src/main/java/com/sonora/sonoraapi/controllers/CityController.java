@@ -20,7 +20,6 @@ public class CityController {
 
     private final CityService cityService;
 
-    // Endpoint para exibir todos os estados (somente para ADMIN e CLIENT)
     @GetMapping("/states")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CityDTO>> getStates() {
@@ -33,7 +32,7 @@ public class CityController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<CityDTO> create(@RequestBody @Valid CityDTO dto) {
         return ResponseEntity.ok(cityService.create(dto));
     }
@@ -65,13 +64,13 @@ public class CityController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<CityDTO> update(@PathVariable Integer id, @RequestBody @Valid CityDTO dto) {
         return ResponseEntity.ok(cityService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         cityService.delete(id);
         return ResponseEntity.noContent().build();

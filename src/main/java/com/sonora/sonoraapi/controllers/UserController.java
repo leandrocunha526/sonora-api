@@ -1,5 +1,6 @@
 package com.sonora.sonoraapi.controllers;
 
+import com.sonora.sonoraapi.dtos.UpdateUserDTO;
 import com.sonora.sonoraapi.dtos.UserDTO;
 import com.sonora.sonoraapi.entities.Role;
 import com.sonora.sonoraapi.entities.User;
@@ -61,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    // Cria um novo usuário (somente para ADMIN)
+    // Cria um novo usuário
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
@@ -78,16 +79,17 @@ public class UserController {
                 createdUser.getUsername(), createdUser.getCpf(), createdUser.getRole().name()));
     }
 
-    // Edita um usuário (somente o próprio usuário ou ADMIN)
+    // Edita um usuário (ADMIN)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UserDTO updatedUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UpdateUserDTO updatedUserDTO) {
 
         // Atualiza o usuário no banco de dados
         User updatedUser = new User();
         updatedUser.setId(id);
         updatedUser.setName(updatedUserDTO.getName());
         updatedUser.setUsername(updatedUserDTO.getUsername());
+        updatedUser.setPassword(updatedUserDTO.getPassword());
         updatedUser.setCpf(updatedUserDTO.getCpf());
         updatedUser.setRole(Role.valueOf(updatedUserDTO.getRole()));
 
@@ -98,7 +100,7 @@ public class UserController {
                 new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(), user.getRole().name()));
     }
 
-    // Deleta um usuário (somente o próprio usuário ou ADMIN)
+    // Deleta um usuário (ADMIN)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
