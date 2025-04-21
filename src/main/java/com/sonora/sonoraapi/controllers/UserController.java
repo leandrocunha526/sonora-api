@@ -25,7 +25,7 @@ public class UserController {
 
     // Lista todos os usuários (somente para ADMIN)
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers().stream()
                 .map(user -> new UserDTO(user.getId(), user.getName(), user.getUsername(), user.getCpf(),
@@ -60,23 +60,6 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userDTO);
-    }
-
-    // Cria um novo usuário
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setCpf(userDTO.getCpf());
-        user.setRole(Role.valueOf(userDTO.getRole()));
-
-        // Salva o usuário no banco de dados
-        User createdUser = userService.createUser(user);
-
-        // Retorna o DTO com os dados do usuário criado
-        return ResponseEntity.status(201).body(new UserDTO(createdUser.getId(), createdUser.getName(),
-                createdUser.getUsername(), createdUser.getCpf(), createdUser.getRole().name()));
     }
 
     // Edita um usuário (ADMIN)
