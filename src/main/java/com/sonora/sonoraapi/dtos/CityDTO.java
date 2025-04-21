@@ -1,6 +1,5 @@
 package com.sonora.sonoraapi.dtos;
 
-import com.sonora.sonoraapi.entities.State;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
