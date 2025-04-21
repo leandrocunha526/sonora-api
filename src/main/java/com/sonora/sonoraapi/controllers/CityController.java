@@ -23,7 +23,6 @@ public class CityController {
     @GetMapping("/states")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<CityDTO>> getStates() {
-        // Convertendo os valores de State para a classe StateDTO
         List<CityDTO> cities = Arrays.stream(State.values())
                 .map(city -> new CityDTO(null, city.name(), city.getFullName()))
                 .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.sonora.sonoraapi.dtos;
 
+import com.sonora.sonoraapi.entities.State;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -11,7 +12,6 @@ public class CityDTO {
     private Integer id;
 
     @NotBlank(message = "O estado é obrigatório")
-    @Size(max = 50, message = "O nome do estado deve ter no máximo 50 caracteres")
     private String state;
 
     @NotBlank(message = "O nome da cidade é obrigatório")
