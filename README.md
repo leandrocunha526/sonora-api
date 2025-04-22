@@ -27,11 +27,15 @@ Este comando irá obter as depedências do projeto, irá compilar e executar.
 
 ## Permissões
 
-ADMIN: Todas as permissões
+ADMIN: Todas as permissões  
 USER: Registros de produtos, cidades, perfil e cadastro do próprio usuário.
 
-## Testes
+## Execução de testes
 
 ```bash
 mvn test
 ```
+
+NOTE: O front-end possui 5 testes e a API testa a criação de usuário.
+
+TESTES MANUAIS (tanto API e front-end): OK
