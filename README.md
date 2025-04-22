@@ -29,3 +29,9 @@ Este comando irá obter as depedências do projeto, irá compilar e executar.
 
 ADMIN: Todas as permissões
 USER: Registros de produtos, cidades, perfil e cadastro do próprio usuário.
+
+## Testes
+
+```bash
+mvn test
+```
