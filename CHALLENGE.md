@@ -44,7 +44,3 @@ O projeto Backend devera ser feito em springboot(java) com organização em cama
 Implementar teste unitário. OK
 
 Utilizar as técnicas de clean code e orientação a objetos S.O.L.I.D OK
-
-Após o fim do projeto disponibilizar no github e gravar um vídeo do projeto rodando no navegador.
-
-A data limite de entrega do projeto será de 7 dias a partir do recebimento do teste.
